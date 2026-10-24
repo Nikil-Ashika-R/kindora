@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Kindora</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f8f2;
+            color: #24352a;
+        }
+
+        nav {
+            background: #176b43;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 22px #00000012;
+        }
+
+        h1 {
+            color: #176b43;
+            margin-top: 0;
+        }
+
+        .subtitle {
+            color: #68756b;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 7px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccd8ce;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
+        }
+
+        input:focus, select:focus {
+            outline: 2px solid #86c9a2;
+            border-color: #176b43;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px;
+            border: none;
+            border-radius: 7px;
+            background: #176b43;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #105433;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 7px;
+            margin: 15px 0;
+        }
+
+        .success {
+            background: #e3f7e8;
+            color: #176b43;
+        }
+
+        .error {
+            background: #fff0ef;
+            color: #a52a24;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #176b43;
+        }
+
+        @media (max-width: 520px) {
+            .container {
+                margin: 24px 15px;
+                padding: 22px;
+            }
+
+            nav {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<nav>
+    <div class="brand">Kindora</div>
+    <a th:href="@{/}">Home</a>
+</nav>
+
+<main class="container">
+
+    <h1>Create your account</h1>
+
+    <p class="subtitle">
+        Join Kindora to reduce food waste and help communities.
+    </p>
+
+    <div th:if="${registered}" class="message success">
+        Registration successful! Your account has been saved.
+        <br>
+        Login will be available in the next module.
+    </div>
+
+    <form th:action="@{/register}"
+          th:object="${registrationForm}"
+          method="post">
+
+        <label for="fullName">Full name or organization name</label>
+        <input id="fullName"
+               type="text"
+               th:field="*{fullName}"
+               maxlength="100"
+               required>
+        <div class="error"
+             th:if="${#fields.hasErrors('fullName')}"
+             th:errors="*{fullName}"></div>
+
+        <label for="email">Email address</label>
+        <input id="email"
+               type="email"
+               th:field="*{email}"
+               maxlength="150"
+               required>
+        <div class="error"
+             th:if="${#fields.hasErrors('email')}"
+             th:errors="*{email}"></div>
+
+        <label for="password">Password</label>
+        <input id="password"
+               type="password"
+               th:field="*{password}"
+               minlength="8"
+               maxlength="72"
+               autocomplete="new-password"
+               required>
+        <div class="error"
+             th:if="${#fields.hasErrors('password')}"
+             th:errors="*{password}"></div>
+
+        <label for="role">Register as</label>
+        <select id="role" th:field="*{role}" required>
+            <option value="">Choose account type</option>
+            <option value="DONOR">Food Donor (Restaurant, Hostel, Event)</option>
+            <option value="NGO">NGO / Community Organization</option>
+        </select>
+        <div class="error"
+             th:if="${#fields.hasErrors('role')}"
+             th:errors="*{role}"></div>
+
+        <button type="submit">Create Account</button>
+    </form>
+
+    <div class="footer">
+        <a th:href="@{/}">Return to Kindora homepage</a>
+    </div>
+
+</main>
+
+</body>
+</html>

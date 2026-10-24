@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindora | Food Donation Platform</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            color: #26352b;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #176b45;
+            color: white;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        header h1 {
+            font-size: 28px;
+        }
+
+        header p {
+            font-size: 13px;
+            color: #e2f3e8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .role {
+            background: #ffffff;
+            color: #176b45;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .logout-btn {
+            background: #ffffff;
+            color: #176b45;
+            border: none;
+            padding: 9px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .hero {
+            background: #e0f2e7;
+            padding: 35px 7%;
+            text-align: center;
+        }
+
+        .hero h2 {
+            color: #176b45;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #4b6252;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        h2.section-title {
+            color: #176b45;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #68776d;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccd8cf;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #a6d8b8;
+            border-color: #176b45;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .btn {
+            display: inline-block;
+            border: none;
+            border-radius: 6px;
+            padding: 11px 18px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .primary-btn {
+            background: #176b45;
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background: #105637;
+        }
+
+        .claim-btn {
+            background: #e4f4e9;
+            color: #176b45;
+            border: 1px solid #a7d5b6;
+        }
+
+        .claim-btn:hover {
+            background: #ccebd7;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 13px 12px;
+            border-bottom: 1px solid #e8eee9;
+        }
+
+        th {
+            background: #edf6f0;
+            color: #176b45;
+            font-size: 13px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f8fbf8;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .available {
+            color: #176b45;
+            background: #e0f4e6;
+        }
+
+        .claimed {
+            color: #875a12;
+            background: #fff0ce;
+        }
+
+        .empty {
+            padding: 22px;
+            text-align: center;
+            color: #68776d;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding: 22px;
+            text-align: center;
+            background: #176b45;
+            color: white;
+            font-size: 13px;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 18px 5%;
+            }
+
+            .hero h2 {
+                font-size: 24px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full-width {
+                grid-column: auto;
+            }
+
+            .card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>Kindora</h1>
+        <p>Share Food. Spread Kindness. Reduce Waste.</p>
+    </div>
+
+    <div class="header-right">
+        <span class="role">
+            Logged in as:
+            <span th:text="${role}">DONOR</span>
+        </span>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</header>
+
+<section class="hero">
+    <h2>Connecting Surplus Food to Those in Need</h2>
+    <p>
+        Kindora connects food donors with NGOs to reduce food waste
+        and support communities.
+    </p>
+</section>
+
+<main class="container">
+
+    <!-- DONOR SECTION -->
+    <section class="card" th:if="${role == 'DONOR'}">
+        <h2 class="section-title">Donate Surplus Food</h2>
+        <p class="subtitle">
+            Enter the details of the food available for donation.
+        </p>
+
+        <form th:action="@{/donate}"
+              th:object="${foodDonation}"
+              method="post">
+
+            <div class="form-grid">
+
+                <div class="field">
+                    <label for="donorName">Restaurant / Donor Name</label>
+                    <input id="donorName"
+                           type="text"
+                           th:field="*{donorName}"
+                           required
+                           maxlength="100"
+                           placeholder="Enter donor name">
+                </div>
+
+                <div class="field">
+                    <label for="foodName">Food Name</label>
+                    <input id="foodName"
+                           type="text"
+                           th:field="*{foodName}"
+                           required
+                           maxlength="100"
+                           placeholder="e.g. Vegetable Rice">
+                </div>
+
+                <div class="field">
+                    <label for="quantity">Quantity</label>
+                    <input id="quantity"
+                           type="number"
+                           th:field="*{quantity}"
+                           min="1"
+                           required
+                           placeholder="Enter quantity">
+                </div>
+
+                <div class="field">
+                    <label for="location">Pickup Location</label>
+                    <input id="location"
+                           type="text"
+                           th:field="*{location}"
+                           required
+                           maxlength="200"
+                           placeholder="e.g. Chennai">
+                </div>
+
+                <div class="field full-width">
+                    <label for="safeUntil">Safe Until</label>
+                    <input id="safeUntil"
+                           type="datetime-local"
+                           th:field="*{safeUntil}"
+                           required>
+                </div>
+
+                <div class="full-width">
+                    <button type="submit" class="btn primary-btn">
+                        Submit Food Donation
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </section>
+
+    <!-- NGO SECTION -->
+    <section class="card" th:if="${role == 'NGO'}">
+        <h2 class="section-title">NGO Dashboard</h2>
+        <p class="subtitle">
+            Browse available food donations and claim food for your community.
+        </p>
+    </section>
+
+    <!-- AVAILABLE DONATIONS -->
+    <section class="card">
+        <h2 class="section-title">Available Food Donations</h2>
+        <p class="subtitle">
+            Food donations currently available for pickup.
+        </p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Food Name</th>
+                    <th>Donor</th>
+                    <th>Quantity</th>
+                    <th>Location</th>
+                    <th>Safe Until</th>
+                    <th>Status</th>
+                    <th th:if="${role == 'NGO'}">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="donation : ${donations}">
+                    <td th:text="${donation.foodName}">Vegetable Rice</td>
+                    <td th:text="${donation.donorName}">ABC Restaurant</td>
+                    <td th:text="${donation.quantity}">20</td>
+                    <td th:text="${donation.location}">Chennai</td>
+                    <td th:text="${donation.safeUntil}">Date and time</td>
+
+                    <td>
+                        <span class="status available"
+                              th:text="${donation.status}">AVAILABLE</span>
+                    </td>
+
+                    <td th:if="${role == 'NGO'}">
+                        <form th:action="@{/claim/{id}(id=${donation.id})}"
+                              method="post">
+                            <button type="submit" class="btn claim-btn">
+                                Claim Food
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(donations)}">
+                    <td colspan="7" class="empty">
+                        No available donations at the moment.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- COMPLETE DONATION HISTORY -->
+    <section class="card">
+        <h2 class="section-title">Donation History</h2>
+        <p class="subtitle">
+            View all donations and track their current status.
+        </p>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>Food Name</th>
+                    <th>Donor</th>
+                    <th>Quantity</th>
+                    <th>Location</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="item : ${allDonations}">
+                    <td th:text="${item.foodName}">Vegetable Rice</td>
+                    <td th:text="${item.donorName}">ABC Restaurant</td>
+                    <td th:text="${item.quantity}">20</td>
+                    <td th:text="${item.location}">Chennai</td>
+
+                    <td>
+                        <span class="status"
+                              th:classappend="${item.status == 'AVAILABLE'} ? ' available' : ' claimed'"
+                              th:text="${item.status}">AVAILABLE</span>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(allDonations)}">
+                    <td colspan="5" class="empty">
+                        No donation history available yet.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <p>Kindora © 2026 | Reducing Food Waste, One Donation at a Time.</p>
+</footer>
+
+</body>
+</html>
